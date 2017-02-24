@@ -1,0 +1,3 @@
+nyc_rooftops.jpg:
+  Licence: https://creativecommons.org/licenses/by/2.0/
+  Attribution: Andrew Hazlett, @ Flickr (https://www.flickr.com/photos/theoccasional/7262545528)
