@@ -1,7 +1,9 @@
 function [ img ] = getWaveletImage( LL, LH, HL, HH )
 % Returns an image of the four wavelet components stitched together.
+% The components are normalized between 0 and 1 to provide better
+% visualization.
 
-    LL = LL - min(LL(:));
+    %LL = LL - min(LL(:));
     LL = LL / max(LL(:));
     
     LH = LH - min(LH(:));

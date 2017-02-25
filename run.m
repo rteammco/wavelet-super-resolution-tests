@@ -1,6 +1,8 @@
+% Runs the wavelet image upsampling experiment.
+
 % Constants. Define as needed.
 filter = 'haar';
-img_file_name = 'cell.jpg'
+img_file_name = 'cell.jpg';
 
 % Read image, convert to gray, resize to fixed size.
 if ~exist('img')
@@ -18,7 +20,8 @@ end
 img_recovered = idwt2(LL_orig, LH_orig, HL_orig, HH_orig, filter);
 
 % Downsample. This is the "input" image.
-img_small = imresize(img, 0.5, 'bilinear');
+img_small = imresize(img, 0.5, 'nearest');
+%img_small = addNoise(img_small, 0.1);
 
 % Upsample. This is for regular upsampling comparison.
 img_upsampled = imresize(img_small, 2, 'bilinear');
@@ -33,10 +36,10 @@ LL_upsampled = imresize(LL_small, 2, dwt_upsampling_mode);
 LH_upsampled = imresize(LH_small, 2, dwt_upsampling_mode);
 HL_upsampled = imresize(HL_small, 2, dwt_upsampling_mode);
 HH_upsampled = imresize(HH_small, 2, dwt_upsampling_mode);
-LL_upsampled = LL_orig;
+%LL_upsampled = LL_orig;
 %LH_upsampled = LH_orig;
 %HL_upsampled = HL_orig;
-%HH_upsampled = HH_orig;
+HH_upsampled = HH_orig;
 
 % IDWT of the upsampled.
 img_dwt_upsampled = idwt2(LL_upsampled, LH_upsampled, HL_upsampled, HH_upsampled, filter);
