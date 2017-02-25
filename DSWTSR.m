@@ -3,7 +3,7 @@ function [ sr_image ] = DSWTSR( lr_image )
 % Based on the paper "Image Resolution Enhancement by Using Discrete and
 % Stationary Wavelet Decomposition" (2011).
     
-    wavelet_filter = 'db37';  % TODO: Daubechies 9/7?
+    wavelet_filter = 'haar';  % TODO: Daubechies 9/7?
     interpolation_method = 'bicubic';
     swt_level = 1;
 
@@ -14,6 +14,7 @@ function [ sr_image ] = DSWTSR( lr_image )
     
     % DWT, and upsample the high-frequency subbands.
     [~, dLH, dHL, dHH] = dwt2(lr_image, wavelet_filter);
+    %dLL = imresize(dLL, size(lr_image), interpolation_method);
     dLH = imresize(dLH, size(lr_image), interpolation_method);
     dHL = imresize(dHL, size(lr_image), interpolation_method);
     dHH = imresize(dHH, size(lr_image), interpolation_method);
@@ -23,14 +24,17 @@ function [ sr_image ] = DSWTSR( lr_image )
     
     % Combine the interpolated DWT high-frequency subbands with the SWT
     % high-frequency subbands.
-    LH = dLH + sLH;
-    HL = dHL + sHL;
-    HH = dHH + sHH;
+    % Dividing by 2 seems to work better.
+    LH = (dLH + sLH) / 2;
+    HL = (dHL + sHL) / 2;
+    HH = (dHH + sHH) / 2;
     
     % Get resulting SR image using inverse DWT on the combined
     % high-frequency subbands, and using the original image as the
     % low-frequency subband.
-    sr_image = idwt2(lr_image, LH, HL, HH, wavelet_filter);
+    % Multiplying the lr_image by 2 scales it to the LL intensity range,
+    % which is 0 to 2.
+    sr_image = idwt2(lr_image * 2, LH, HL, HH, wavelet_filter);
 
 end
 

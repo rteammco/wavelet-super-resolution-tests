@@ -1,4 +1,4 @@
-img_file_name = 'cell.jpg';
+img_file_name = 'nyc_rooftops.jpg';
 
 if ~exist('img')
     img = imread(['test_images/' img_file_name]);
@@ -14,7 +14,7 @@ img_upsampled = imresize(img_small, 2, 'bicubic');
 [psnr_upsampled, ~] = psnr(img_upsampled, img);
 
 img_sr = DSWTSR(img_small);
-psnr_sr = 0;%[psnr_sr, ~] = psnr(img_sr, img);
+[psnr_sr, ~] = psnr(img_sr, img);
 
 subplot(2, 2, 1);
 imshow(img_small);
