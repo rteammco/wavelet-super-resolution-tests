@@ -1,9 +1,9 @@
-function [ sr_image ] = DSWTSR( lr_image, scale_alpha )
+function [ sr_image ] = DSWTSR( lr_image, scale )
 % Discrete and Stationary Wavelet Transform Super-Resolution.
 % Based on the paper "Image Resolution Enhancement by Using Discrete and
 % Stationary Wavelet Decomposition" (2011).
 %
-% scale_alpha = the upsampling scale (e.g. 2 for 2x enlargement).
+% scale = the upsampling scale (e.g. 2 for 2x enlargement).
     
     dwt_wavelet_filter_fwd = 'db9';
     swt_wavelet_filter_fwd = 'db9';
@@ -38,10 +38,10 @@ function [ sr_image ] = DSWTSR( lr_image, scale_alpha )
     % Multiplying the lr_image by 2 scales it to the LL intensity range,
     % which is 0 to 2.
     %sr_image = idwt2(lr_image * 2, LH, HL, HH, wavelet_filter_inv);
-    LL = imresize(lr_image, scale_alpha / 2, interpolation_method) * 2;
-    LH = imresize(LH, scale_alpha / 2, interpolation_method);
-    HL = imresize(HL, scale_alpha / 2, interpolation_method);
-    HH = imresize(HH, scale_alpha / 2, interpolation_method);
+    LL = imresize(lr_image, scale / 2, interpolation_method) * 2;
+    LH = imresize(LH, scale / 2, interpolation_method);
+    HL = imresize(HL, scale / 2, interpolation_method);
+    HH = imresize(HH, scale / 2, interpolation_method);
     
     % Get resulting SR image using inverse DWT on the combined
     % high-frequency subbands, and using the original image as the
