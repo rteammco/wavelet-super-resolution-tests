@@ -1,24 +1,29 @@
-img_file_name = 'nyc_rooftops.jpg';
+img_file_name = 'lena.jpg';
 
 if ~exist('img')
     img = imread(['test_images/' img_file_name]);
     img = rgb2gray(img);
-    img = imresize(img, [500, 500]);
+    img = imresize(img, [512, 512]);
     img = im2double(img);
     disp('Loaded image.');
 end
 
-img_small = imresize(img, 0.5, 'bicubic');
+scale = 4;
+img_small = imresize(img, 1.0 / scale, 'bicubic');
 
-img_upsampled = imresize(img_small, 2, 'bicubic');
-[psnr_upsampled, ~] = psnr(img_upsampled, img);
+% Run the DSWT Super-Resolution code.
+img_sr = DSWTSR(img_small, scale);
+disp(['Sizes: ' mat2str(size(img_sr)) ' vs. ' mat2str(size(img))]);
+img_compare = imresize(img, size(img_sr), 'bicubic');
+[psnr_sr, ~] = psnr(img_sr, img_compare);
 
-img_sr = DSWTSR(img_small);
-[psnr_sr, ~] = psnr(img_sr, img);
+% Compare to upsampled version.
+img_upsampled = imresize(img_small, size(img_sr), 'bicubic');
+[psnr_upsampled, ~] = psnr(img_upsampled, img_compare);
 
 subplot(2, 2, 1);
 imshow(img_small);
-title('Original');
+title('Low-Resolution Original');
 
 subplot(2, 2, 2);
 imshow(img);
