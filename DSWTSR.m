@@ -17,7 +17,8 @@ function [ sr_image ] = DSWTSR( lr_image, scale )
     end
     
     % DWT, and upsample the high-frequency subbands.
-    [~, dLH, dHL, dHH] = dwt2(lr_image, dwt_wavelet_filter_fwd);
+    %[~, dLH, dHL, dHH] = dwt2(lr_image, dwt_wavelet_filter_fwd);
+    [~, dLH, dHL, dHH] = dwt2db97(lr_image);
     dLH = imresize(dLH, size(lr_image), interpolation_method);
     dHL = imresize(dHL, size(lr_image), interpolation_method);
     dHH = imresize(dHH, size(lr_image), interpolation_method);
@@ -46,7 +47,8 @@ function [ sr_image ] = DSWTSR( lr_image, scale )
     % Get resulting SR image using inverse DWT on the combined
     % high-frequency subbands, and using the original image as the
     % low-frequency subband.
-    sr_image = idwt2(LL, LH, HL, HH, dwt_wavelet_filter_inv);
+    %sr_image = idwt2(LL, LH, HL, HH, dwt_wavelet_filter_inv);
+    sr_image = idwt2db97(LL, LH, HL, HH);
 
 end
 
